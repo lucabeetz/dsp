@@ -16,7 +16,7 @@ def evaluate(run_chain, dev):
 
         d = dict(example)
         d['prediction'] = prediction
-        d['correct'] = normalize_text(prediction) in example['answers']
+        d['correct'] = EM(prediction, example['answers'])
 
         data.append(d)
 
@@ -28,6 +28,16 @@ def evaluate(run_chain, dev):
     
     df['correct'] = df['correct'].apply(lambda x: '✅' if x else '❌')
     display(df)
+
+
+def EM(prediction, answers_list):
+    assert type(answers_list) == list
+
+    return max(em_score(prediction, ans) for ans in answers_list)
+
+
+def em_score(prediction, ground_truth):
+    return normalize_text(prediction) == normalize_text(ground_truth)
 
 
 def normalize_text(s):
