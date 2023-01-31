@@ -76,3 +76,20 @@ def colbertv2_get_request(url: str, query: str, k: int):
 
     topk = res.json()['topk'][:k]
     return topk
+
+
+def format_context(context):
+    """
+    Format and enumerate a list of context strings for use in a prompt.
+    """
+    return '\n'.join([f'[{i+1}] {c}' for i, c in enumerate(context)])
+
+
+def extract_last_line(completion, remove_prefix=True):
+    """
+    Extract the last line of a completion, optionally removing the prefix.
+    """
+    last_line = completion.split('\n')[-1].strip()
+    if remove_prefix:
+        last_line = last_line.split(':')[-1].strip()
+    return last_line
